@@ -400,7 +400,7 @@ class Advanced_Product_Filtering {
 		}
 		/* MOST POPULAR  */
 		
-		public function param_array_to_str( $parameters, $operator ) {
+		public function param_array_to_str( $parameters, $operator="AND" ) {
 
 		$str = "";
 		$count = 0;
@@ -409,13 +409,15 @@ class Advanced_Product_Filtering {
 
 			$count++;
 
-				$str .= $key;
+				$str .= $this->sanitize_param_key( $key );
 
 				if( is_array( $value ) ) {
 						
-					foreach($value as $val_key => $val_value):
+					foreach( $value as $val_key => $val_value ):
 
-					$str .= $val_key . "'" . $val_value . "'";					
+					$str .= $this->sanitize_param_key( $val_key );
+					 
+					$str .= "'" . $this->sanitize_param_value( $val_value ) . "'";					
 
 					endforeach;
 
@@ -423,11 +425,11 @@ class Advanced_Product_Filtering {
 
 				else {
 						
-				$str .= " = '" . $value . "'";
+				$str .= " = '" . $this->sanitize_param_value( $value ). "'";
 
 				}
 
-			if(count($parameters) > $count) {
+			if( count( $parameters ) > $count ) {
 				
 			$str .= " " . $operator . " ";
 
@@ -437,6 +439,31 @@ class Advanced_Product_Filtering {
 
 		return $str;
 
+		}
+
+		private function sanitize_param_value( $data ) {
+			
+		$data = str_replace( '+', '\+', $data );
+
+		return $data;
+
+		}
+
+		private function sanitize_param_key( $data ) {
+			
+		$data = self::escape_square_brackets( $data );
+
+		return $data;
+
+		}
+
+		private static function escape_square_brackets($value) {
+		
+		$value = str_replace('[', '\[?\d?', $value);
+		$value = str_replace(']', '\]?', $value);
+		
+		return $value;
+		
 		}
 
 		public function count_prods( $parameters, $includeQueryParams=true, $operator = "AND" ) {

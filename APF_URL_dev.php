@@ -75,15 +75,9 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		$separator = ( strpos( $this->request_url, '?' ) ) ? "&" : "?";
 		
-		$parameter = $this->param_array_to_str( $parameters, $separator, $esc_symb=true );
+		$parameter = $this->param_array_to_str( $parameters, $separator );
 		
-		$pattern = "[\?&]";
-
-		if($square_brackets) {
-
-		$pattern .= .self::escape_square_brackets($name)."=".$value;
-
-		}
+		$pattern = "[\?&]" . $parameter;
 		
 		if(preg_match("#$pattern#i", $this->request_url) == false) {
 		
@@ -129,14 +123,7 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		}
 		
-		public static function escape_square_brackets($value) {
-		
-		$value = str_replace('[', '\[?\d?', $value);
-		$value = str_replace(']', '\]?', $value);
-		
-		return $value;
-		
-		}
+
 		
 }
 

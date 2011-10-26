@@ -319,11 +319,13 @@ $box_content->parse('filter_box.price_filters_close');
 
 /* STOCKED PRODUCTS */
 
-$number_most_pop = $apf->count_prods( array('stock_level' => array( '>' => '0' ) ) );
+$condition = array( 'stock_level' => array( '>' => '0' ) );
+
+$number_most_pop = $apf->count_prods( $condition );
 
 if($number_most_pop[0]['product_count'] > 0) {
 
-$most_popular = $apf_url->create_link("pop", "Y");
+$most_popular = $apf_url->create_link( $condition );
 
 $box_content->assign('MOST_POPULAR_LINK', $most_popular);
 
