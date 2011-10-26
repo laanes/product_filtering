@@ -400,7 +400,7 @@ class Advanced_Product_Filtering {
 		}
 		/* MOST POPULAR  */
 		
-		public function param_array_to_str( $parameters, $operator="AND" ) {
+		public function param_array_to_str( $parameters, $operator="AND", $url=false ) {
 
 		$str = "";
 		$count = 0;
@@ -425,7 +425,7 @@ class Advanced_Product_Filtering {
 
 				else {
 						
-				$str .= " = '" . $this->sanitize_param_value( $value ). "'";
+				$str .= "=" . $this->sanitize_param_value( $value );
 
 				}
 
@@ -436,6 +436,12 @@ class Advanced_Product_Filtering {
 			}
 
 			endforeach;
+
+		// if( $url ) {
+			
+		// $str = urlencode($str);
+
+		// }
 
 		return $str;
 
@@ -459,8 +465,8 @@ class Advanced_Product_Filtering {
 
 		private static function escape_square_brackets($value) {
 		
-		$value = str_replace('[', '\[?\d?', $value);
-		$value = str_replace(']', '\]?', $value);
+		$value = str_replace('[', '\[', $value);
+		$value = str_replace(']', '\]', $value);
 		
 		return $value;
 		

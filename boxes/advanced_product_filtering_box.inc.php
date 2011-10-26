@@ -64,10 +64,12 @@ $box_content->parse('filter_box.category_filters_open');
 }
 
 for($i=0; $i<=$apf->count['cat']-1; $i++) {
-	
-$link = $apf_url->create_link("cat_id[]", $cat[$i]['cat_id']);
 
-$prods_per_cat = $apf->count_prods( array( "cat_id" => $cat[$i]['cat_id'] ), false);
+$condition = array( "cat_id" => $cat[$i]['cat_id'] );
+	
+$link = $apf_url->create_link( $condition );
+
+$prods_per_cat = $apf->count_prods( $condition, false);
 
 $box_content->assign('CAT_PRODS_NO', "(".$prods_per_cat[0]['product_count'].")");
 
@@ -75,7 +77,7 @@ $box_content->assign('CAT', $cat[$i]);
 
 $box_content->assign('CAT_LINK', $link);
 
-$filter_class = $apf_url->generate_filter_class("cat_id[]", $cat[$i]['cat_id']);
+$filter_class = $apf_url->generate_filter_class("cat_id", $cat[$i]['cat_id']);
 
 $box_content->assign('FILTER_CLASS', $filter_class);
 
@@ -95,45 +97,47 @@ $box_content->parse('filter_box.category_filters_close');
 if($apf->showAllFilters()) {
 
 /*  BRANDS  */
-if($apf->count['brand'] > 0) {
+// if($apf->count['brand'] > 0) {
 
-if(!empty($brand[0]['brand_id'])) {
+// if(!empty($brand[0]['brand_id'])) {
 
-$box_content->parse('filter_box.brand_filters_open');
+// $box_content->parse('filter_box.brand_filters_open');
 
-}
+// }
 
-for($i=0; $i<=$apf->count['brand']-1; $i++) {
+// for($i=0; $i<=$apf->count['brand']-1; $i++) {
 
-$link = $apf_url->create_link("brand_id[]", $brand[$i]['brand_id']);
+// $condition = array( "brand_id" => $brand[$i]['brand_id'] );
 
-$prods_per_brand = $apf->count_prods( array( "brand_id" => $brand[$i]['brand_id'] ) );
+// $link = $apf_url->create_link( $condition );
 
-if($prods_per_brand[0]['product_count'] > 0) {
+// $prods_per_brand = $apf->count_prods( $condition );
 
-$box_content->assign('BRAND_PRODS_NO', "(".$prods_per_brand[0]['product_count'].")");
+// if($prods_per_brand[0]['product_count'] > 0) {
 
-$box_content->assign('BRAND', $brand[$i]);
+// $box_content->assign('BRAND_PRODS_NO', "(".$prods_per_brand[0]['product_count'].")");
 
-$box_content->assign('BRAND_LINK', $link);
+// $box_content->assign('BRAND', $brand[$i]);
 
-$filter_class = $apf_url->generate_filter_class("brand_id[]", $brand[$i]['brand_id']);
+// $box_content->assign('BRAND_LINK', $link);
 
-$box_content->assign('FILTER_CLASS', $filter_class);
+// $filter_class = $apf_url->generate_filter_class("brand_id[]", $brand[$i]['brand_id']);
 
-$box_content->parse('filter_box.brand_filters');
+// $box_content->assign('FILTER_CLASS', $filter_class);
 
-}
+// $box_content->parse('filter_box.brand_filters');
 
-}
+// }
 
-if(!empty($brand[0]['brand_id'])) {
+// }
 
-$box_content->parse('filter_box.brand_filters_close');
+// if(!empty($brand[0]['brand_id'])) {
 
-}
+// $box_content->parse('filter_box.brand_filters_close');
 
-}
+// }
+
+// }
 /*  BRANDS  */
 
 /* TYPE  */
@@ -147,21 +151,23 @@ $box_content->parse('filter_box.type_filters_open');
 
 for($i=0; $i<=$apf->count['type']-1; $i++) {
 
+$condition = array( "type" => $type[$i]['type'] );
+
 if(!empty($type[$i]['type'])) {
 
-$prods_per_type = $apf->count_prods( array( "type" => $type[$i]['type'] ) );
+$prods_per_type = $apf->count_prods( $condition );
 
 if($prods_per_type[0]['product_count'] > 0) {
 
 $box_content->assign('TYPES_NO', "(".$prods_per_type[0]['product_count'].")");
 
-$link = $apf_url->create_link("type[]", $type[$i]['type']);
+$link = $apf_url->create_link( $condition );
 
 $box_content->assign('TYPE', $type[$i]);
 
 $box_content->assign('TYPE_LINK', $link);
 
-$filter_class = $apf_url->generate_filter_class("type[]", $type[$i]['type']);
+$filter_class = $apf_url->generate_filter_class("type", $type[$i]['type']);
 
 $box_content->assign('FILTER_CLASS', $filter_class);
 
@@ -193,21 +199,23 @@ $box_content->parse('filter_box.finish_filters_open');
 
 for($i=0; $i<=$apf->count['finish']-1; $i++) {
 
+$condition = array( "finish" => $finish[$i]['finish'] );
+
 if(!empty($finish[$i]['finish'])) {
 
-$prods_per_finish = $apf->count_prods( array( "finish" => $finish[$i]['finish'] ) );
+$prods_per_finish = $apf->count_prods( $condition );
 
 if($prods_per_finish[0]['product_count'] > 0) {
 
 $box_content->assign('FINISHES_NO', "(".$prods_per_finish[0]['product_count'].")");
 
-$link = $apf_url->create_link("finish[]", $finish[$i]['finish']);
+$link = $apf_url->create_link( $condition );
 
 $box_content->assign('FINISH', $finish[$i]);
 
 $box_content->assign('FINISH_LINK', $link);
 
-$filter_class = $apf_url->generate_filter_class("finish[]", $finish[$i]['finish']);
+$filter_class = $apf_url->generate_filter_class("finish", $finish[$i]['finish']);
 
 $box_content->assign('FILTER_CLASS', $filter_class);
 
@@ -239,21 +247,23 @@ $box_content->parse('filter_box.fixing_centres_open');
 
 for($i=0; $i<=$apf->count['fixing_centres']-1; $i++) {
 
+$condition = array( "fixing_centres" => $fixing_centres[$i]['fixing_centres'] );
+
 if(!empty($fixing_centres[$i]['fixing_centres'])) {
 
-$prods_per_fixing_centres = $apf->count_prods( array( "fixing_centres" => $fixing_centres[$i]['fixing_centres'] ) );
+$prods_per_fixing_centres = $apf->count_prods( $condition );
 
 if($prods_per_fixing_centres[0]['product_count'] > 0) {
 
 $box_content->assign('FIXING_CENTRES_NO', "(".$prods_per_fixing_centres[0]['product_count'].")");
 
-$link = $apf_url->create_link("fixing_centres[]", $fixing_centres[$i]['fixing_centres']);
+$link = $apf_url->create_link( $condition );
 
 $box_content->assign('FIXING_CENTRES', $fixing_centres[$i]);
 
 $box_content->assign('FIXING_CENTRES_LINK', $link);
 
-$filter_class = $apf_url->generate_filter_class("fixing_centres[]", $fixing_centres[$i]['fixing_centres']);
+$filter_class = $apf_url->generate_filter_class("fixing_centres", $fixing_centres[$i]['fixing_centres']);
 
 $box_content->assign('FILTER_CLASS', $filter_class);
 
@@ -286,19 +296,21 @@ $box_content->parse('filter_box.price_filters_open');
 
 for($i=0; $i<=$apf->count['price_range']-1; $i++) {
 
-$prods_per_price = $apf->count_prods( array( "price_range" => $price_ranges[$i]['range_id'] ) );
+$condition = array( "price_range" => $price_ranges[$i]['range_id'] );
+
+$prods_per_price = $apf->count_prods( $condition );
 
 if($prods_per_price[0]['product_count'] > 0) {
 
 $box_content->assign('PRICE_PRODS_NO', "(".$prods_per_price[0]['product_count'].")");
 
-$link = $apf_url->create_link("price_range[]", $price_ranges[$i]['range_id']);
+$link = $apf_url->create_link( $condition );
 
 $box_content->assign('PRICE_RANGE', $price_ranges[$i]);
 
 $box_content->assign('PRICE_RANGE_LINK', $link);
 
-$filter_class = $apf_url->generate_filter_class("price_range[]", $price_ranges[$i]['range_id']);
+$filter_class = $apf_url->generate_filter_class("price_range", $price_ranges[$i]['range_id']);
 
 $box_content->assign('FILTER_CLASS', $filter_class);
 
@@ -319,7 +331,7 @@ $box_content->parse('filter_box.price_filters_close');
 
 /* STOCKED PRODUCTS */
 
-$condition = array( 'stock_level' => array( '>' => '0' ) );
+$condition = array( 'stock_level' => array( '!=' => '0' ) );
 
 $number_most_pop = $apf->count_prods( $condition );
 

@@ -44,8 +44,7 @@ class APF_URL extends Advanced_Product_Filtering {
 		}
 
 		public function generate_filter_class($name="", $value="") {
-		
-		$name = self::escape_square_brackets($name);
+	
 		
 		$value = $this->bulletProof($value);
 		
@@ -69,33 +68,31 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		}
 		
-		public function create_link( $parameters ) {	
-		
-		$value = $this->bulletProof($value);
+		public function create_link( $parameters ) {
 		
 		$separator = ( strpos( $this->request_url, '?' ) ) ? "&" : "?";
 		
-		$parameter = $this->param_array_to_str( $parameters, $separator );
+		$parameter = $this->param_array_to_str( $parameters, $separator, true );
 		
 		$pattern = "[\?&]" . $parameter;
 		
-		if(preg_match("#$pattern#i", $this->request_url) == false) {
+		if(preg_match( "#$pattern#i", $this->request_url ) == false) {
 		
-		$link = $this->request_url.$parameter;
+		$link = $this->request_url . $parameter;
 		
 		}
 		
 		else {
 		
-		$link = preg_replace("#$pattern#i", "", $this->request_url);
+		$link = preg_replace( "#$pattern#i", "", $this->request_url );
 		
 		}
 		
-		return $link;
+		return $parameter;
 		
 		}
 		
-		public function remove_all_parameters($url) {
+		public function remove_all_parameters( $url ) {
 		
 		$filters = self::$regex_list;
 		
