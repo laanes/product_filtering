@@ -290,12 +290,14 @@ class Advanced_Product_Filtering {
 		public function get_price_ranges() {
 		
 		global $db;
+	
+		$url_filter = self::$filters_query_string;
 
 		$query = "SELECT R.range_id, R.price_range FROM price_ranges as R INNER JOIN CubeCart_inventory as I ON R.range_id = I.price_range WHERE I.productId IN ('". $this->product_ids ."')";
 		
 		if(!$this->is_only_filter('price_range')) {
 		
-		$query .= self::$filters_query_string;
+		$query .= $url_filter;
 		
 		}
 
@@ -339,12 +341,14 @@ class Advanced_Product_Filtering {
 		public function get_finish() {
 		
 		global $db;
+
+		$url_filter = self::$filters_query_string;
 		
 		$query = "SELECT I.finish FROM CubeCart_inventory as I WHERE I.productId IN ('". $this->product_ids ."')"; 
 		
 		// if(!$this->is_only_filter('finish')) {
 		
-		$query .= self::$filters_query_string;
+		$query .= $url_filter;
 		
 		// }
 
@@ -361,12 +365,14 @@ class Advanced_Product_Filtering {
 		public function get_fixing_centres() {
 		
 		global $db;
+
+		$url_filter = self::$filters_query_string;
 		
 		$query = "SELECT I.fixing_centres FROM CubeCart_inventory as I WHERE I.productId IN ('". $this->product_ids ."')"; 
 		
 		// if(!$this->is_only_filter('fixing_centres')) {
 		
-		$query .= self::$filters_query_string;
+		$query .= $url_filter;
 		
 		// }
 		
@@ -394,31 +400,66 @@ class Advanced_Product_Filtering {
 		}
 		/* MOST POPULAR  */
 		
-		public function count_prods( $parameters, $includeQueryParams=true) {
+		public function param_array_to_str( $parameters, $operator ) {
+
+		$str = "";
+		$count = 0;
+			
+			foreach( $parameters as $key => $value ):
+
+			$count++;
+
+				$str .= $key;
+
+				if( is_array( $value ) ) {
+						
+					foreach($value as $val_key => $val_value):
+
+					$str .= $val_key . "'" . $val_value . "'";					
+
+					endforeach;
+
+				}
+
+				else {
+						
+				$str .= " = '" . $value . "'";
+
+				}
+
+			if(count($parameters) > $count) {
+				
+			$str .= " " . $operator . " ";
+
+			}
+
+			endforeach;
+
+		return $str;
+
+		}
+
+		public function count_prods( $parameters, $includeQueryParams=true, $operator = "AND" ) {
 		
 		global $db;
-
-		foreach($parameters as $param => $value):
-
-		$params[] = $param . " = '" . $value . "'";
-			
-		endforeach;
-
-		$params = implode(' AND ', $params);
 		
 		if(!empty($this->product_ids)) {
-		
-		$condition = "productId IN ('".$this->product_ids."') AND $params";
 
-		if($includeQueryParams) {
+		$param = $this->param_array_to_str( $parameters, $operator );
 		
-		$condition .= self::$filters_query_string;
+		$url_filter = self::$filters_query_string;
+		
+		$condition = "productId IN ('" . $this->product_ids ."') AND $param";
+
+		if( $includeQueryParams ) {
+		
+		$condition .= $url_filter;
 		
 		}
 		
 		$query = "SELECT COUNT(productId) as product_count FROM CubeCart_inventory as I WHERE $condition";
 		
-		$prod_count = $db->select($query);
+		$prod_count = $db->select( $query );
 		
 		return $prod_count;
 		

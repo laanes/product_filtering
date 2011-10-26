@@ -1,4 +1,3 @@
-
 <?php
 // /*
 
@@ -68,7 +67,7 @@ for($i=0; $i<=$apf->count['cat']-1; $i++) {
 	
 $link = $apf_url->create_link("cat_id[]", $cat[$i]['cat_id']);
 
-$prods_per_cat = $apf->count_prods("cat_id", $cat[$i]['cat_id'], false);
+$prods_per_cat = $apf->count_prods( array( "cat_id" => $cat[$i]['cat_id'] ), false);
 
 $box_content->assign('CAT_PRODS_NO', "(".$prods_per_cat[0]['product_count'].")");
 
@@ -108,7 +107,7 @@ for($i=0; $i<=$apf->count['brand']-1; $i++) {
 
 $link = $apf_url->create_link("brand_id[]", $brand[$i]['brand_id']);
 
-$prods_per_brand = $apf->count_prods("brand_id", $brand[$i]['brand_id']);
+$prods_per_brand = $apf->count_prods( array( "brand_id" => $brand[$i]['brand_id'] ) );
 
 if($prods_per_brand[0]['product_count'] > 0) {
 
@@ -150,7 +149,7 @@ for($i=0; $i<=$apf->count['type']-1; $i++) {
 
 if(!empty($type[$i]['type'])) {
 
-$prods_per_type = $apf->count_prods("type", $type[$i]['type']);
+$prods_per_type = $apf->count_prods( array( "type" => $type[$i]['type'] ) );
 
 if($prods_per_type[0]['product_count'] > 0) {
 
@@ -196,7 +195,7 @@ for($i=0; $i<=$apf->count['finish']-1; $i++) {
 
 if(!empty($finish[$i]['finish'])) {
 
-$prods_per_finish = $apf->count_prods("finish", $finish[$i]['finish']);
+$prods_per_finish = $apf->count_prods( array( "finish" => $finish[$i]['finish'] ) );
 
 if($prods_per_finish[0]['product_count'] > 0) {
 
@@ -242,7 +241,7 @@ for($i=0; $i<=$apf->count['fixing_centres']-1; $i++) {
 
 if(!empty($fixing_centres[$i]['fixing_centres'])) {
 
-$prods_per_fixing_centres = $apf->count_prods("fixing_centres", $fixing_centres[$i]['fixing_centres']);
+$prods_per_fixing_centres = $apf->count_prods( array( "fixing_centres" => $fixing_centres[$i]['fixing_centres'] ) );
 
 if($prods_per_fixing_centres[0]['product_count'] > 0) {
 
@@ -287,7 +286,7 @@ $box_content->parse('filter_box.price_filters_open');
 
 for($i=0; $i<=$apf->count['price_range']-1; $i++) {
 
-$prods_per_price = $apf->count_prods("price_range", $price_ranges[$i]['range_id']);
+$prods_per_price = $apf->count_prods( array( "price_range" => $price_ranges[$i]['range_id'] ) );
 
 if($prods_per_price[0]['product_count'] > 0) {
 
@@ -319,7 +318,8 @@ $box_content->parse('filter_box.price_filters_close');
 /* PRICE_RANGES  */
 
 /* STOCKED PRODUCTS */
-$number_most_pop = $apf->count_prods( array( "pop" => "Y", "stock_level" => array( ">" => "0" ) ) );
+
+$number_most_pop = $apf->count_prods( array('stock_level' => array( '>' => '0' ) ) );
 
 if($number_most_pop[0]['product_count'] > 0) {
 
