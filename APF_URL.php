@@ -127,7 +127,7 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		public static function escape_square_brackets($value) {
 		
-		$value = str_replace('[', '\[?\d?', $value);
+		$value = str_replace('[', '\[?\d+?', $value);
 		$value = str_replace(']', '\]?', $value);
 		
 		return $value;
