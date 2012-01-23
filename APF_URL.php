@@ -69,7 +69,9 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		}
 		
-		public function create_link($name="", $value="") {	
+		public function create_link($name="", $value="") {
+
+		$url = urldecode($this->request_url);
 		
 		$value = $this->bulletProof($value);
 		
@@ -81,15 +83,25 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		$pattern = "[\?&]".self::escape_square_brackets($name)."=".$value;
 		
-		if(preg_match("#$pattern#i", urldecode($this->request_url)) == false) {
+		if(preg_match("#$pattern#i", $url) == false) {
 		
 		$link = $this->request_url.$parameter;
 		
 		}
 		
 		else {
-		
-		$link = preg_replace("#$pattern#i", "", urldecode($this->request_url));
+
+		# Check if it is a category filter
+
+			if( preg_match( '/cat_id\[/', $name ) ):
+
+			$link = $this->remove_all_parameters($url);
+
+			else:
+
+			$link = preg_replace("#$pattern#i", "", $url);
+			
+			endif;
 		
 		}
 		
