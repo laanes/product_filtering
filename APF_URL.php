@@ -52,8 +52,11 @@ class APF_URL extends Advanced_Product_Filtering {
 		$value = str_replace('+', '\+', $value);
 			
 		$pattern = "[\?&]".$name."=".$value;
-		
-		if(!preg_match("#$pattern#i", $this->request_url)) {
+
+		# This debug line helped Aare to overcome the mystery!
+		// echo $pattern . " " . urldecode($this->request_url) . " " . preg_match("#$pattern#i", urldecode($this->request_url)) . "<br/>";
+
+		if(!preg_match("#$pattern#i", urldecode($this->request_url))) {
 		
 		$class = "passive_filter";
 		
@@ -127,7 +130,7 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		public static function escape_square_brackets($value) {
 		
-		$value = str_replace('[', '\[?\d+?', $value);
+		$value = str_replace('[', '\[?\d?+', $value);
 		$value = str_replace(']', '\]?', $value);
 		
 		return $value;
