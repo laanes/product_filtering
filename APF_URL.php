@@ -53,9 +53,6 @@ class APF_URL extends Advanced_Product_Filtering {
 			
 		$pattern = "[\?&]".$name."=".$value;
 
-		# This debug line helped Aare to overcome the mystery!
-		// echo $pattern . " " . urldecode($this->request_url) . " " . preg_match("#$pattern#i", urldecode($this->request_url)) . "<br/>";
-
 		if(!preg_match("#$pattern#i", urldecode($this->request_url))) {
 		
 		$class = "passive_filter";
@@ -84,7 +81,7 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		$pattern = "[\?&]".self::escape_square_brackets($name)."=".$value;
 		
-		if(preg_match("#$pattern#i", $this->request_url) == false) {
+		if(preg_match("#$pattern#i", urldecode($this->request_url)) == false) {
 		
 		$link = $this->request_url.$parameter;
 		
@@ -92,7 +89,7 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		else {
 		
-		$link = preg_replace("#$pattern#i", "", $this->request_url);
+		$link = preg_replace("#$pattern#i", "", urldecode($this->request_url));
 		
 		}
 		
