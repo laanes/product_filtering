@@ -44,6 +44,8 @@ class APF_URL extends Advanced_Product_Filtering {
 		}
 
 		public function generate_filter_class($name="", $value="") {
+
+		$url = self::pagination_fix( $this->request_url );
 		
 		$name = self::escape_square_brackets($name);
 		
@@ -53,7 +55,7 @@ class APF_URL extends Advanced_Product_Filtering {
 			
 		$pattern = "[\?&]".$name."=".$value;
 
-		if(!preg_match("#$pattern#i", urldecode($this->request_url))) {
+		if(!preg_match("#$pattern#i", $url)) {
 		
 		$class = "passive_filter";
 		
@@ -71,21 +73,21 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		public function create_link($name="", $value="") {
 
-		$url = urldecode($this->request_url);
+		$url = self::pagination_fix( $this->request_url );
 		
-		$value = $this->bulletProof($value);
+		$value = $this->bulletProof( $value );
 		
-		$separator = (strpos($this->request_url, '?')) ? "&" : "?";
+		$separator = strpos( $url, '?' ) ? "&" : "?";
 		
 		$parameter = $separator.$name."=".$value;
 		
 		$value = str_replace('+', '\+', $value);
 		
 		$pattern = "[\?&]".self::escape_square_brackets($name)."=".$value;
-		
+
 		if(preg_match("#$pattern#i", $url) == false) {
 		
-		$link = $this->request_url.$parameter;
+		$link = $url . $parameter;
 		
 		}
 		
@@ -109,9 +111,11 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		}
 		
-		public function remove_all_parameters($url) {
+		public function remove_all_parameters() {
 		
 		$filters = self::$regex_list;
+
+		$url = self::pagination_fix( $this->request_url );
 		
 		$url = preg_replace("#[\?&]($filters)\[?\d?\]?=.*#", '', $url);
 		
@@ -119,22 +123,30 @@ class APF_URL extends Advanced_Product_Filtering {
 		
 		}
 		
-		public function has_parameters($url) {
+		public function has_parameters() {
 		
 		$filters = self::$regex_list;
 		
-		$url = preg_match("#[\?&]($filters)\[?\d?\]?=.*#", $url);
+		$url = self::pagination_fix( $this->request_url );
 		
-		return $url;
+		$check = preg_match("#[\?&]($filters)\[?\d?\]?=.*#", $url);
+		
+		return $check;
 		
 		}
 		
-		public static function sanitize_filter_name($value){
+		public static function sanitize_filter_name($value) {
 		
 		$value = preg_replace('#[^\w_]+#', '', $value);
 		
 		return $value;
 		
+		}
+
+		private static function pagination_fix( $url=null ) {
+			
+		return isset( $_GET['page'] ) ? str_replace( ' ', '+', urldecode( $url ) ) : $url;
+
 		}
 		
 		public static function escape_square_brackets($value) {
